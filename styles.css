@@ -1,0 +1,335 @@
+/* =============================================
+   Clean Cards View — Styles
+   ============================================= */
+
+/* Root container */
+.clean-cards-root {
+  background-color: #f4f4f4 !important;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.clean-cards-wrapper {
+  padding: 20px;
+  max-width: 100%;
+}
+
+/* Flex layout with JS columns */
+.clean-cards-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: opacity 0.15s ease;
+}
+
+.clean-cards-column {
+  flex: 1 1 208px;
+  min-width: 208px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card */
+.clean-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Cover image */
+.clean-card-cover {
+  width: 100%;
+  overflow: hidden;
+}
+
+.clean-card-cover img {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Card body */
+.clean-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Canvas mini-map */
+.clean-card-canvas-cover {
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.theme-dark .clean-card-canvas-cover {
+  background: #2a2a2a;
+}
+
+.clean-card-canvas-svg {
+  width: 100%;
+  height: auto;
+  max-height: 160px;
+  display: block;
+}
+
+/* Title */
+.clean-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+
+/* Text preview */
+.clean-card-preview {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #888888;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tags container */
+.clean-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* Tag chip */
+.clean-card-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* =============================================
+   Tag filter bar
+   ============================================= */
+.clean-cards-filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0 16px;
+  scrollbar-width: none;
+}
+
+.clean-cards-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.clean-cards-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  color: #555555;
+  transition: background 0.15s ease, color 0.15s ease;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.clean-cards-filter-chip:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Chip icon */
+.clean-cards-chip-icon {
+  flex-shrink: 0;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -0.5px;
+}
+
+/* Divider between system filters and tags */
+.clean-cards-filter-divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 4px;
+  background: rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.theme-dark .clean-cards-filter-divider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.clean-cards-filter-chip.is-active {
+  background: var(--interactive-accent, #7b6cd9);
+  color: var(--text-on-accent, #ffffff);
+}
+
+/* Dark theme */
+.theme-dark .clean-cards-filter-chip {
+  color: #aaaaaa;
+}
+
+.theme-dark .clean-cards-filter-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-dark .clean-cards-filter-chip.is-active {
+  background: var(--interactive-accent, #7b6cd9);
+  color: var(--text-on-accent, #ffffff);
+}
+
+/* Header — hidden on desktop, visible on mobile */
+.clean-cards-header {
+  display: none;
+}
+
+/* =============================================
+   Dark theme support
+   ============================================= */
+.theme-dark .clean-cards-root {
+  background-color: #1e1e1e !important;
+}
+
+.theme-dark .clean-card {
+  background: #2a2a2a;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-dark .clean-card-title {
+  color: #e0e0e0;
+}
+
+.theme-dark .clean-card-preview {
+  color: #777777;
+}
+
+.theme-dark .clean-card-tag {
+  background: #363636;
+  color: #b0b0b0;
+}
+
+/* =============================================
+   Mobile / narrow screens
+   ============================================= */
+@media (max-width: 500px) {
+  .clean-cards-filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0 12px;
+    scrollbar-width: none;
+  }
+
+  .clean-cards-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .clean-cards-filter-chip {
+    font-size: 12px;
+    padding: 10px 20px;
+    border-radius: 100px;
+  }
+
+  .clean-cards-header {
+    display: block;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 76px 0 12px;
+    letter-spacing: -0.01em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: #f4f4f4;
+  }
+
+  .theme-dark .clean-cards-header {
+    color: #e0e0e0;
+    background-color: #1e1e1e;
+  }
+
+  .clean-cards-wrapper {
+    padding: 8px;
+    padding-top: 112px;
+  }
+
+  .clean-cards-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .clean-cards-column {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .clean-card {
+    width: 100%;
+  }
+
+  .clean-card-body {
+    padding: 10px;
+    gap: 4px;
+  }
+
+  .clean-card-title {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .clean-card-preview {
+    font-size: 11px;
+    -webkit-line-clamp: 3;
+  }
+
+  .clean-card-tag {
+    font-size: 10px;
+    padding: 3px 7px;
+  }
+
+  .clean-card-tags {
+    gap: 4px;
+    margin-top: 2px;
+  }
+
+  .clean-card-cover img {
+    max-height: 100px;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "clean-cards-view",
+  "name": "Clean Cards View",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "Display vault notes as clean, minimal cards with cover images, text preview, tags and filtering.",
+  "author": "Artem",
+  "isDesktopOnly": false
+}

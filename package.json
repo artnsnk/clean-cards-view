@@ -1,0 +1,19 @@
+{
+  "name": "clean-cards-view",
+  "version": "1.0.0",
+  "description": "Displays vault notes as clean, minimal cards with cover images, text preview and tags.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "keywords": ["obsidian-plugin", "cards", "gallery"],
+  "author": "Artem",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "esbuild": "^0.20.0",
+    "obsidian": "latest",
+    "typescript": "^5.3.0"
+  }
+}
