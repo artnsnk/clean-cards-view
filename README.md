@@ -2,7 +2,20 @@
 
 Display your vault notes as clean, minimal cards with cover images, text preview, tags and filtering.
 
-![Clean Cards View screenshot](screenshots/desktop-dark.png)
+## Screenshots
+
+### Desktop
+
+![Desktop dark theme](screenshots/desktop-dark.png)
+
+![Desktop light theme](screenshots/desktop-light.png)
+
+### Mobile
+
+<p float="left">
+  <img src="screenshots/mobile-dark.png" width="300" />
+  <img src="screenshots/mobile-light.png" width="300" />
+</p>
 
 ## Features
 
