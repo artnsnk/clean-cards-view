@@ -22,6 +22,11 @@
   transition: opacity 0.15s ease;
 }
 
+.clean-cards-grid.is-hidden {
+  opacity: 0;
+  transition: none;
+}
+
 .clean-cards-column {
   flex: 1 1 208px;
   min-width: 208px;
@@ -155,7 +160,7 @@
   cursor: pointer;
   border: none !important;
   box-shadow: none !important;
-  background: transparent;
+  background: #ffffff;
   color: #555555;
   transition: background 0.15s ease, color 0.15s ease;
   outline: none;
@@ -196,6 +201,7 @@
 
 /* Dark theme */
 .theme-dark .clean-cards-filter-chip {
+  background: rgba(255, 255, 255, 0.08);
   color: #aaaaaa;
 }
 

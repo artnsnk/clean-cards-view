@@ -78,13 +78,12 @@ class CleanCardsView extends ItemView {
     this._grid = grid;
     this._lastColumnCount = 0;
 
-    await this.renderFilterBar();
+    this.renderFilterBar();
     await this.renderCards(grid);
 
     // Re-render when files change — hide immediately
     const fileChanged = (): void => {
-      grid.style.transition = "none";
-      grid.style.opacity = "0";
+      grid.addClass("is-hidden");
       this.debounceRender(grid);
     };
     this.registerEvent(this.app.vault.on("modify", fileChanged));
@@ -96,12 +95,11 @@ class CleanCardsView extends ItemView {
     this._resizeObserver = new ResizeObserver(() => {
       const newCount = this.getColumnCount(grid);
       if (newCount !== this._lastColumnCount && newCount > 0) {
-        grid.style.transition = "none";
-        grid.style.opacity = "0";
+        grid.addClass("is-hidden");
         this._lastColumnCount = newCount;
         if (this._resizeRenderTimer) clearTimeout(this._resizeRenderTimer);
-        this._resizeRenderTimer = setTimeout(async () => {
-          await this.renderCards(grid);
+        this._resizeRenderTimer = setTimeout(() => {
+          void this.renderCards(grid);
         }, 50);
       }
     });
@@ -166,7 +164,7 @@ class CleanCardsView extends ItemView {
 
   // ── Filter bar ──
 
-  private async renderFilterBar(): Promise<void> {
+  private renderFilterBar(): void {
     this._filterBar.empty();
 
     // Collect all tags from all files
@@ -191,9 +189,8 @@ class CleanCardsView extends ItemView {
     allChip.addEventListener("click", () => {
       this._activeTag = null;
       this.renderFilterBar();
-      this._grid.style.transition = "none";
-      this._grid.style.opacity = "0";
-      this.renderCards(this._grid);
+      this._grid.addClass("is-hidden");
+      void this.renderCards(this._grid);
     });
 
     // "Untagged" chip
@@ -206,9 +203,8 @@ class CleanCardsView extends ItemView {
     untaggedChip.addEventListener("click", () => {
       this._activeTag = "__untagged__";
       this.renderFilterBar();
-      this._grid.style.transition = "none";
-      this._grid.style.opacity = "0";
-      this.renderCards(this._grid);
+      this._grid.addClass("is-hidden");
+      void this.renderCards(this._grid);
     });
 
     // "Canvases" chip
@@ -225,9 +221,8 @@ class CleanCardsView extends ItemView {
       canvasChip.addEventListener("click", () => {
         this._activeTag = "__canvases__";
         this.renderFilterBar();
-        this._grid.style.transition = "none";
-        this._grid.style.opacity = "0";
-        this.renderCards(this._grid);
+        this._grid.addClass("is-hidden");
+        void this.renderCards(this._grid);
       });
     }
 
@@ -247,9 +242,8 @@ class CleanCardsView extends ItemView {
       chip.addEventListener("click", () => {
         this._activeTag = tag;
         this.renderFilterBar();
-        this._grid.style.transition = "none";
-        this._grid.style.opacity = "0";
-        this.renderCards(this._grid);
+        this._grid.addClass("is-hidden");
+        void this.renderCards(this._grid);
       });
     }
   }
@@ -258,16 +252,15 @@ class CleanCardsView extends ItemView {
 
   private debounceRender(grid: HTMLElement): void {
     if (this._debounceTimer) clearTimeout(this._debounceTimer);
-    this._debounceTimer = setTimeout(async () => {
-      await this.renderFilterBar();
-      await this.renderCards(grid);
+    this._debounceTimer = setTimeout(() => {
+      this.renderFilterBar();
+      void this.renderCards(grid);
     }, 500);
   }
 
   private async renderCards(grid: HTMLElement): Promise<void> {
     // Hide grid before rebuilding to prevent flash of wrong layout
-    grid.style.transition = "none";
-    grid.style.opacity = "0";
+    grid.addClass("is-hidden");
 
     grid.empty();
 
@@ -335,8 +328,7 @@ class CleanCardsView extends ItemView {
 
     // Fade in after layout is ready
     requestAnimationFrame(() => {
-      grid.style.transition = "opacity 0.15s ease";
-      grid.style.opacity = "1";
+      grid.removeClass("is-hidden");
     });
   }
 
@@ -378,7 +370,7 @@ class CleanCardsView extends ItemView {
     body.appendChild(titleEl);
 
     // Text preview
-    const preview = this.getPreviewText(content, frontmatter);
+    const preview = this.getPreviewText(content);
     if (preview) {
       const previewEl = document.createElement("div");
       previewEl.className = "clean-card-preview";
@@ -584,10 +576,7 @@ class CleanCardsView extends ItemView {
     return null;
   }
 
-  private getPreviewText(
-    content: string,
-    _frontmatter: FrontMatterCache
-  ): string | null {
+  private getPreviewText(content: string): string | null {
     // Remove frontmatter
     let text = content.replace(/^---[\s\S]*?---\n?/, "");
 
@@ -650,17 +639,19 @@ class CleanCardsView extends ItemView {
 // ── Plugin ──
 
 export default class CleanCardsPlugin extends Plugin {
-  async onload(): Promise<void> {
+  onload(): void {
     this.registerView(VIEW_TYPE, (leaf) => new CleanCardsView(leaf));
 
     this.addRibbonIcon("layout-grid", "Cards View", () => {
-      this.activateView();
+      void this.activateView();
     });
 
     this.addCommand({
-      id: "open-clean-cards-view",
-      name: "Open Cards View",
-      callback: () => this.activateView(),
+      id: "open-view",
+      name: "Open cards view",
+      callback: () => {
+        void this.activateView();
+      },
     });
   }
 

@@ -55,11 +55,10 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     const grid = wrapper.createDiv({ cls: "clean-cards-grid" });
     this._grid = grid;
     this._lastColumnCount = 0;
-    await this.renderFilterBar();
+    this.renderFilterBar();
     await this.renderCards(grid);
     const fileChanged = () => {
-      grid.style.transition = "none";
-      grid.style.opacity = "0";
+      grid.addClass("is-hidden");
       this.debounceRender(grid);
     };
     this.registerEvent(this.app.vault.on("modify", fileChanged));
@@ -69,13 +68,12 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     this._resizeObserver = new ResizeObserver(() => {
       const newCount = this.getColumnCount(grid);
       if (newCount !== this._lastColumnCount && newCount > 0) {
-        grid.style.transition = "none";
-        grid.style.opacity = "0";
+        grid.addClass("is-hidden");
         this._lastColumnCount = newCount;
         if (this._resizeRenderTimer)
           clearTimeout(this._resizeRenderTimer);
-        this._resizeRenderTimer = setTimeout(async () => {
-          await this.renderCards(grid);
+        this._resizeRenderTimer = setTimeout(() => {
+          void this.renderCards(grid);
         }, 50);
       }
     });
@@ -131,7 +129,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     chip.appendText(label);
   }
   // ── Filter bar ──
-  async renderFilterBar() {
+  renderFilterBar() {
     var _a;
     this._filterBar.empty();
     const allTags = /* @__PURE__ */ new Set();
@@ -150,9 +148,8 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     allChip.addEventListener("click", () => {
       this._activeTag = null;
       this.renderFilterBar();
-      this._grid.style.transition = "none";
-      this._grid.style.opacity = "0";
-      this.renderCards(this._grid);
+      this._grid.addClass("is-hidden");
+      void this.renderCards(this._grid);
     });
     const untaggedChip = this._filterBar.createEl("button", {
       cls: "clean-cards-filter-chip" + (this._activeTag === "__untagged__" ? " is-active" : "")
@@ -161,9 +158,8 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     untaggedChip.addEventListener("click", () => {
       this._activeTag = "__untagged__";
       this.renderFilterBar();
-      this._grid.style.transition = "none";
-      this._grid.style.opacity = "0";
-      this.renderCards(this._grid);
+      this._grid.addClass("is-hidden");
+      void this.renderCards(this._grid);
     });
     const canvasFiles = this.app.vault.getFiles().filter((f) => f.extension === "canvas");
     if (canvasFiles.length > 0) {
@@ -174,9 +170,8 @@ var CleanCardsView = class extends import_obsidian.ItemView {
       canvasChip.addEventListener("click", () => {
         this._activeTag = "__canvases__";
         this.renderFilterBar();
-        this._grid.style.transition = "none";
-        this._grid.style.opacity = "0";
-        this.renderCards(this._grid);
+        this._grid.addClass("is-hidden");
+        void this.renderCards(this._grid);
       });
     }
     if (sortedTags.length > 0) {
@@ -190,9 +185,8 @@ var CleanCardsView = class extends import_obsidian.ItemView {
       chip.addEventListener("click", () => {
         this._activeTag = tag;
         this.renderFilterBar();
-        this._grid.style.transition = "none";
-        this._grid.style.opacity = "0";
-        this.renderCards(this._grid);
+        this._grid.addClass("is-hidden");
+        void this.renderCards(this._grid);
       });
     }
   }
@@ -200,15 +194,14 @@ var CleanCardsView = class extends import_obsidian.ItemView {
   debounceRender(grid) {
     if (this._debounceTimer)
       clearTimeout(this._debounceTimer);
-    this._debounceTimer = setTimeout(async () => {
-      await this.renderFilterBar();
-      await this.renderCards(grid);
+    this._debounceTimer = setTimeout(() => {
+      this.renderFilterBar();
+      void this.renderCards(grid);
     }, 500);
   }
   async renderCards(grid) {
     var _a, _b;
-    grid.style.transition = "none";
-    grid.style.opacity = "0";
+    grid.addClass("is-hidden");
     grid.empty();
     const mdFiles = this.app.vault.getMarkdownFiles();
     const canvasFiles = this.app.vault.getFiles().filter((f) => f.extension === "canvas");
@@ -258,8 +251,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
       }
     }
     requestAnimationFrame(() => {
-      grid.style.transition = "opacity 0.15s ease";
-      grid.style.opacity = "1";
+      grid.removeClass("is-hidden");
     });
   }
   // ── Card builders ──
@@ -291,7 +283,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     titleEl.className = "clean-card-title";
     titleEl.textContent = title;
     body.appendChild(titleEl);
-    const preview = this.getPreviewText(content, frontmatter);
+    const preview = this.getPreviewText(content);
     if (preview) {
       const previewEl = document.createElement("div");
       previewEl.className = "clean-card-preview";
@@ -456,7 +448,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     }
     return null;
   }
-  getPreviewText(content, _frontmatter) {
+  getPreviewText(content) {
     let text = content.replace(/^---[\s\S]*?---\n?/, "");
     text = text.replace(/!\[.*?\]\(.*?\)/g, "").replace(/!\[\[.*?\]\]/g, "").replace(/\[([^\]]*)\]\(.*?\)/g, "$1").replace(/\[\[([^\]|]*?)(?:\|([^\]]*?))?\]\]/g, "$2 || $1").replace(/^#{1,6}\s+/gm, "").replace(/\*\*|__/g, "").replace(/\*|_/g, "").replace(/~~(.*?)~~/g, "$1").replace(/`{1,3}[^`]*`{1,3}/g, "").replace(/^[-*+]\s+/gm, "").replace(/^\d+\.\s+/gm, "").replace(/^>\s+/gm, "").replace(/\n{2,}/g, "\n").trim();
     if (text.length > 160) {
@@ -486,15 +478,17 @@ var CleanCardsView = class extends import_obsidian.ItemView {
   }
 };
 var CleanCardsPlugin = class extends import_obsidian.Plugin {
-  async onload() {
+  onload() {
     this.registerView(VIEW_TYPE, (leaf) => new CleanCardsView(leaf));
     this.addRibbonIcon("layout-grid", "Cards View", () => {
-      this.activateView();
+      void this.activateView();
     });
     this.addCommand({
-      id: "open-clean-cards-view",
-      name: "Open Cards View",
-      callback: () => this.activateView()
+      id: "open-view",
+      name: "Open cards view",
+      callback: () => {
+        void this.activateView();
+      }
     });
   }
   async activateView() {
