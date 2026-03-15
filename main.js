@@ -37,7 +37,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     return VIEW_TYPE;
   }
   getDisplayText() {
-    return "Cards View";
+    return "Cards view";
   }
   getIcon() {
     return "layout-grid";
@@ -47,7 +47,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
     this.containerEl.addClass("clean-cards-root");
     this.containerEl.createEl("div", {
       cls: "clean-cards-header",
-      text: "Cards View"
+      text: "Cards view"
     });
     const wrapper = this.containerEl.createDiv({ cls: "clean-cards-wrapper" });
     this._filterBar = wrapper.createDiv({ cls: "clean-cards-filter-bar" });
@@ -480,7 +480,7 @@ var CleanCardsView = class extends import_obsidian.ItemView {
 var CleanCardsPlugin = class extends import_obsidian.Plugin {
   onload() {
     this.registerView(VIEW_TYPE, (leaf) => new CleanCardsView(leaf));
-    this.addRibbonIcon("layout-grid", "Cards View", () => {
+    this.addRibbonIcon("layout-grid", "Cards view", () => {
       void this.activateView();
     });
     this.addCommand({

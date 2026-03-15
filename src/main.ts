@@ -51,7 +51,7 @@ class CleanCardsView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Cards View";
+    return "Cards view";
   }
 
   getIcon(): string {
@@ -65,7 +65,7 @@ class CleanCardsView extends ItemView {
     // Header (visible on mobile) — outside wrapper for sticky positioning
     this.containerEl.createEl("div", {
       cls: "clean-cards-header",
-      text: "Cards View",
+      text: "Cards view",
     });
 
     const wrapper = this.containerEl.createDiv({ cls: "clean-cards-wrapper" });
@@ -642,7 +642,7 @@ export default class CleanCardsPlugin extends Plugin {
   onload(): void {
     this.registerView(VIEW_TYPE, (leaf) => new CleanCardsView(leaf));
 
-    this.addRibbonIcon("layout-grid", "Cards View", () => {
+    this.addRibbonIcon("layout-grid", "Cards view", () => {
       void this.activateView();
     });
 
